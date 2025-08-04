@@ -1,0 +1,52 @@
+{
+  "name": "world-news-api-mcp",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "world-news-api-mcp": "dist/index.js"
+  },
+  "files": [
+    "dist/**/*",
+    "README.md",
+    "LICENSE",
+    ".env.example"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsc && node dist/index.js",
+    "test": "tsc && node dist/test.js",
+    "test:tools": "node -e \"process.stdin.pipe(process.stdout)\" | echo '{\\\"jsonrpc\\\":\\\"2.0\\\",\\\"id\\\":1,\\\"method\\\":\\\"tools/list\\\",\\\"params\\\":{}}' | node dist/index.js",
+    "prepublishOnly": "npm run build",
+    "pack:test": "npm pack --dry-run",
+    "version:patch": "npm version patch",
+    "version:minor": "npm version minor",
+    "version:major": "npm version major",
+    "postinstall": "echo 'Please set your WORLD_NEWS_API_KEY environment variable. See README.md for details.'"
+  },
+  "keywords": ["mcp", "world-news-api", "news", "api", "model-context-protocol", "journalism", "headlines"],
+  "author": "David Urbansky <mail@worldnewsapi.com>",
+  "license": "ISC",
+  "description": "MCP server for the World News API - search news, get headlines, extract articles, and more",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ddsky/world-news-api-mcp.git"
+  },
+  "homepage": "https://github.com/ddsky/world-news-api-mcp#readme",
+  "bugs": {
+    "url": "https://github.com/ddsky/world-news-api-mcp/issues"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.2.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.17.1",
+    "zod": "^3.25.76"
+  }
+}
