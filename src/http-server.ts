@@ -60,6 +60,21 @@ app.post("/mcp", async (req: Request, res: Response) => {
       });
     }
 
+    if (method === "initialize") {
+      console.log("🤝 initialize requested");
+      return res.json({
+        jsonrpc: "2.0",
+        id,
+        result: {
+          server_name: "world-news-api-mcp",
+          server_version: "0.1.0",
+          capabilities: {
+            tools: {}   // segnali che supporti i tool
+          }
+        }
+      });
+    }
+
     console.warn(`⚠️ Unknown method: ${method}`);
     return res.json({
       jsonrpc: "2.0",
