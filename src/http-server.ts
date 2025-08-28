@@ -16,6 +16,8 @@ app.get("/health", (_req: Request, res: Response) => {
 app.post("/mcp", async (req: Request, res: Response) => {
   const { id, jsonrpc, method, params = {} } = req.body || {};
 
+  console.log("📩 Incoming MCP request:", JSON.stringify(req.body, null, 2));
+
   if (jsonrpc !== "2.0") {
     return res.json({
       jsonrpc: "2.0",
@@ -26,7 +28,7 @@ app.post("/mcp", async (req: Request, res: Response) => {
 
   try {
     if (method === "tools/list") {
-      // valida MCP request
+      console.log("🔧 tools/list requested");
       ListToolsRequestSchema.parse({ id, method, params });
       return res.json({ jsonrpc: "2.0", id, result: { tools } });
     }
@@ -35,7 +37,11 @@ app.post("/mcp", async (req: Request, res: Response) => {
       CallToolRequestSchema.parse({ id, method, params });
       const { name, arguments: args } = params || {};
 
+      console.log(`🚀 tools/call requested for tool: ${name}`);
+      console.log("   with arguments:", JSON.stringify(args, null, 2));
+
       if (!(name in toolHandlers)) {
+        console.warn(`⚠️ Tool not found: ${name}`);
         return res.json({
           jsonrpc: "2.0",
           id,
@@ -54,12 +60,14 @@ app.post("/mcp", async (req: Request, res: Response) => {
       });
     }
 
+    console.warn(`⚠️ Unknown method: ${method}`);
     return res.json({
       jsonrpc: "2.0",
       id,
       error: { code: -32601, message: `Unknown method: ${method}` },
     });
   } catch (e: any) {
+    console.error("💥 Error handling MCP request:", e);
     return res.json({
       jsonrpc: "2.0",
       id,
