@@ -91,6 +91,14 @@ app.post("/mcp", async (req: Request, res: Response) => {
   }
 });
 
+// rispondiamo a chi prova SSE (GET /mcp)
+app.get("/mcp", (_req: Request, res: Response) => {
+  console.log("⚠️ GET /mcp (SSE) richiesto ma non supportato");
+  res.status(405).json({
+    error: "MCP over SSE not supported, use POST /mcp"
+  });
+});
+
 const PORT = Number(process.env.PORT ?? 8080);
 app.listen(PORT, () => {
   console.log(`✅ MCP HTTP server listening on :${PORT}`);
